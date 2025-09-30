@@ -6,12 +6,15 @@ use App\Http\Controllers\PemilihController;
 use App\Http\Controllers\PemilihVotingController;
 use App\Http\Controllers\Auth\PemilihAuthController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('test', [Controller::class, 'x']); // Route untuk testing
 
 // Pemilih Authentication Routes
 Route::prefix('pemilih')->group(function () {
