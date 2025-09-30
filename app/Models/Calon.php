@@ -13,12 +13,15 @@ class Calon extends Model
         'nama_calon',
         'foto',
         'visi',
-        'misi',
         'jumlah_suara'
     ];
 
     public function votings()
     {
         return $this->hasMany(Voting::class);
+    }
+    public function misi()
+    {
+        return $this->hasMany(Misi::class);
     }
 }

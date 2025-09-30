@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('calons', function (Blueprint $table) {
+        Schema::create('misis', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_calon');
-            $table->string('foto')->nullable();
-            $table->text('visi');
-            // $table->text('misi');
-            $table->integer('jumlah_suara')->default(0);
+            $table->string('misi');
+            $table->foreignId('calon_id')->constrained('calons')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('calons');
+        Schema::dropIfExists('misis');
     }
 };
