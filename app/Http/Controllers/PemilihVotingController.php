@@ -33,7 +33,7 @@ class PemilihVotingController extends Controller
             return redirect()->route('pemilih.thanks');
         }
 
-        $calon = Calon::all();
+        $calon = Calon::with('misi')->get();
         return view('pemilih.voting', compact('pemilih', 'calon'));
     }
 

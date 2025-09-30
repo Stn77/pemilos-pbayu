@@ -42,6 +42,11 @@
 
                                         <h6 class="text-primary">Visi</h6>
                                         <p class="card-text small">{{ Str::limit($c->visi, 100) }}</p>
+                                        <h6 class="text-primary">misi</h6>
+                                        @foreach ($c->misi as $misi)
+                                        <p class="card-text small">{{ Str::limit($misi->misi, 100) }}</p>
+
+                                        @endforeach
 
                                         <button type="button" class="btn btn-outline-primary btn-sm mt-2"
                                             data-bs-toggle="modal" data-bs-target="#detailModal{{ $c->id }}">
@@ -88,7 +93,10 @@
                                                     <p>{{ $c->visi }}</p>
 
                                                     <h5 class="text-primary mt-4">Misi</h5>
-                                                    <div style="white-space: pre-line;">{{ $c->misi }}</div>
+                                                    @foreach ($c->misi as $misi)
+
+                                                    <div style="white-space: pre-line;">{{ $misi->misi }}</div>
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         </div>
