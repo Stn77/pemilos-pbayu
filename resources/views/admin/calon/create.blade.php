@@ -38,7 +38,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="visi" class="form-label">Visi <span class="text-danger">*</span></label>
-                            <textarea class="form-control @error('visi') is-invalid @enderror" id="visi" name="visi" rows="4"
+                            <textarea class="form-control @error('visi') is-invalid @enderror" id="visi" name="visi" rows="4" id="visi"
                                 required>{{ old('visi') }}</textarea>
                             @error('visi')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -48,13 +48,39 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="misi" class="form-label">Misi <span class="text-danger">*</span></label>
-                    <textarea class="form-control @error('misi') is-invalid @enderror" id="misi" name="misi" rows="6"
-                        required>{{ old('misi') }}</textarea>
+                    <div class="form-group row mb-3">
+                        <label for="misi1" class="col-sm-2 col-form-label">Misi 1 <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="misi1" placeholder="Misi 1" name="misi_1" required>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label for="misi2" class="col-sm-2 col-form-label">Misi 2 <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="misi2" placeholder="Misi 2" name="misi_2" required>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label for="misi3" class="col-sm-2 col-form-label">Misi 3 <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="misi3" placeholder="Misi 3" name="misi_3" required>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label for="misi4" class="col-sm-2 col-form-label">Misi 4</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="misi4" placeholder="Misi 4" name="misi_4">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label for="misi5" class="col-sm-2 col-form-label">Misi 5</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="misi5" placeholder="Misi 5" name="misi_5">
+                        </div>
+                    </div>
                     @error('misi')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                    <div class="form-text">Gunakan poin-poin untuk misi (contoh: 1. Misi pertama... 2. Misi kedua...)</div>
                 </div>
 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">

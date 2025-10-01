@@ -72,7 +72,9 @@
                     <div class="mb-4">
                         <h6 class="text-primary">Misi</h6>
                         <div class="border rounded p-3 bg-light" style="white-space: pre-line;">
-                            {{ $calon->misi }}
+                            @foreach ($calon->misi as $misi)
+                            {{$misi->misi}}
+                            @endforeach
                         </div>
                     </div>
 
