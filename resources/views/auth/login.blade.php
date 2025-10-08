@@ -10,6 +10,15 @@
 
 <body class="bg-light">
     <div class="container">
+        <!-- Tombol Kembali Saja -->
+        <div class="row mt-3">
+            <div class="col-12">
+                <a href="{{ url('/') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </a>
+            </div>
+        </div>
+
         <div class="row justify-content-center min-vh-100 align-items-center">
             <div class="col-md-6">
                 <div class="card shadow">
