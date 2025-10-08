@@ -203,13 +203,12 @@
             </a>
 
             <div class="navbar-nav ms-auto">
-                <!-- User info dan logout - hanya tampil di desktop -->
                 <span class="navbar-text text-white me-3">
-                    <i class="fas fa-user-shield"></i> {{ Auth::user()->name }}
+                    <i class="fas fa-user-shield m-1"></i> {{ Auth::user()->name }}
                 </span>
                 <a class="nav-link text-white" href="{{ route('logout') }}"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+                    <i class="fas fa-sign-out-alt m-2"></i> Logout
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
