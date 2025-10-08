@@ -87,36 +87,74 @@ class CalonController extends Controller
         return view('admin.calon.show', compact('calon'));
     }
 
-    public function edit(Calon $calon)
+    public function edit($calon)
     {
+        $calon = Calon::with('misi')->find($calon);
         return view('admin.calon.edit', compact('calon'));
     }
 
-    public function update(Request $request, Calon $calon)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'nama_calon' => 'required|string|max:255',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'visi' => 'required|string',
-            'misi' => 'required|string',
+            'misi_1' => 'required|string|max:255',
+            'misi_2' => 'required|string|max:255',
+            'misi_3' => 'required|string|max:255',
+            'misi_4' => 'nullable|string|max:255',
+            'misi_5' => 'nullable|string|max:255',
         ]);
 
-        $data = $request->only(['nama_calon', 'visi', 'misi']);
+        try {
+            $calon = Calon::findOrFail($id);
 
-        // Handle foto upload
-        if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
-            if ($calon->foto) {
-                Storage::disk('public')->delete($calon->foto);
+            // Update data calon
+            $dataCalon = [
+                'nama_calon' => $request->nama_calon,
+                'visi' => $request->visi,
+            ];
+
+            // Handle foto upload
+            if ($request->hasFile('foto')) {
+                // Hapus foto lama jika ada
+                if ($calon->foto && Storage::exists($calon->foto)) {
+                    Storage::delete($calon->foto);
+                }
+
+                $fotoPath = $request->file('foto')->store('calon', 'public');
+                $dataCalon['foto'] = $fotoPath;
             }
 
-            $fotoPath = $request->file('foto')->store('calon', 'public');
-            $data['foto'] = $fotoPath;
+            $calon->update($dataCalon);
+
+            // Update misi
+            $misiData = [];
+
+            // Misi wajib
+            $misiData[] = ['misi' => $request->misi_1];
+            $misiData[] = ['misi' => $request->misi_2];
+            $misiData[] = ['misi' => $request->misi_3];
+
+            // Misi opsional
+            if ($request->filled('misi_4')) {
+                $misiData[] = ['misi' => $request->misi_4];
+            }
+
+            if ($request->filled('misi_5')) {
+                $misiData[] = ['misi' => $request->misi_5];
+            }
+
+            // Hapus misi lama dan buat yang baru
+            $calon->misi()->delete();
+            $calon->misi()->createMany($misiData);
+
+            return redirect()->route('calon.index')
+                ->with('success', 'Data calon berhasil diperbarui');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        $calon->update($data);
-
-        return redirect()->route('calon.index')->with('success', 'Data calon berhasil diperbarui.');
     }
 
     public function destroy(Calon $calon)
