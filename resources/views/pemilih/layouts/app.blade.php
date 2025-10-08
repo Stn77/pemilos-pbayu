@@ -115,7 +115,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="{{ route('pemilih.dashboard') }}">
-                <i class="fas fa-vote-yea"></i> PEMILOS
+                <i class="fas fa-vote-yea m-2"></i>PEMILOS
             </a>
 
             <button class="hamburger-btn" id="hamburgerMenu">
