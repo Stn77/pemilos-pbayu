@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pemilih;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Yajra\DataTables\DataTables;
 
 class PemilihController extends Controller
 {
@@ -82,5 +83,23 @@ class PemilihController extends Controller
     {
         Pemilih::query()->update(['sudah_memilih' => false]);
         return redirect()->route('pemilih.index')->with('success', 'Status voting semua pemilih telah direset.');
+    }
+
+    public function getPemilih(Request $request)
+    {
+        $data = Pemilih::query();
+
+        if($request->status) {
+            if($request->status === 'memilih') $data->where('sudah_memilih', true);
+            else $data->where('sudah_memilih', false);
+        }
+
+        if($request->kelas) {
+            $data->where('kelas', 'LIKE', '%'.$request->kelas.'%');
+        }
+
+        return DataTables::of($data->get())
+            ->addIndexColumn()
+            ->make(true);
     }
 }
