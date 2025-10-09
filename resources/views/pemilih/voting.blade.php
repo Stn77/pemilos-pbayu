@@ -117,7 +117,7 @@
                                                         @csrf
                                                         <button type="submit"
                                                                 class="btn btn-success btn-lg w-100 py-3 fw-bold"
-                                                                onclick="return confirm('Apakah Anda yakin memilih {{ $c->nama_calon }}?')">
+                                                                onclick="return confirmVote('{{ $c->nama_calon }}')">
                                                             <i class="fas fa-check-circle me-2"></i>
                                                             PILIH {{ Str::upper($c->nama_calon) }}
                                                         </button>
@@ -178,7 +178,7 @@
                                             <form action="{{ route('pemilih.vote', $c->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 <button type="submit" class="btn btn-success btn-lg px-4"
-                                                    onclick="return confirm('Apakah Anda yakin memilih {{ $c->nama_calon }}?')">
+                                                    onclick="return confirmVote('{{ $c->nama_calon }}')">
                                                     <i class="fas fa-check-circle"></i> Pilih
                                                 </button>
                                             </form>
@@ -230,7 +230,7 @@
                                                     class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success"
-                                                        onclick="return confirm('Apakah Anda yakin memilih {{ $c->nama_calon }}?')">
+                                                        onclick="return confirmVote('{{ $c->nama_calon }}')">
                                                         <i class="fas fa-check-circle"></i> Pilih Kandidat Ini
                                                     </button>
                                                 </form>
@@ -290,24 +290,32 @@
         box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
     }
 
-    /* Custom rounded corners untuk gambar */
+    /* Image styling */
     .rounded {
         border-radius: 8px !important;
     }
 
-    /* Optimasi untuk gambar persegi panjang */
-    .card-calon img,
-    .card-calon-mobile img {
-        border: 2px solid #f8f9fa;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    /* Button optimization for mobile */
+    @media (max-width: 767.98px) {
+        .btn {
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     }
 </style>
 @endpush
 
 @push('scripts')
 <script>
+    // Konfirmasi vote sederhana
+    function confirmVote(namaCalon) {
+        return confirm(`Apakah Anda yakin memilih ${namaCalon}?\n\n⚠️ Pilihan tidak dapat diubah setelah dikonfirmasi!`);
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-        // Handle mobile card interactions
+        // Enhanced touch experience for mobile cards
         const mobileCards = document.querySelectorAll('.card-calon-mobile');
 
         mobileCards.forEach(card => {
@@ -325,23 +333,21 @@
                 });
             });
 
-            // Prevent form submit from triggering collapse
-            const forms = card.querySelectorAll('form');
-            forms.forEach(form => {
-                form.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
+            // Touch feedback
+            card.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            });
+
+            card.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
             });
         });
 
-        // Auto close modal after form submit (for desktop)
-        const modals = document.querySelectorAll('.modal');
-        modals.forEach(modal => {
-            modal.addEventListener('hidden.bs.modal', function() {
-                const forms = this.querySelectorAll('form');
-                forms.forEach(form => {
-                    form.reset();
-                });
+        // Prevent form buttons from triggering collapse
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('click', function(e) {
+                e.stopPropagation();
             });
         });
     });
