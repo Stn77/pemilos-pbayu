@@ -20,8 +20,8 @@ Route::get('test', [Controller::class, 'x']); // Route untuk testing
 Route::prefix('pemilih')->middleware('guest')->group(function () {
     Route::get('/login', [PemilihAuthController::class, 'showLoginForm'])->name('pemilih.login');
     Route::post('/login', [PemilihAuthController::class, 'login']);
+    Route::post('/logout', [PemilihAuthController::class, 'logout'])->middleware('auth')->name('pemilih.logout');
 });
-Route::post('/logout', [PemilihAuthController::class, 'logout'])->name('pemilih.logout');
 
 // Manual Admin Authentication Routes (tanpa Auth::routes())
 Route::get('/admin/login', [LoginController::class, 'showLoginForm'])->name('login')->middleware('guest');

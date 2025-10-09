@@ -118,6 +118,7 @@
                 <i class="fas fa-vote-yea m-2"></i>PEMILOS
             </a>
 
+            @auth
             <button class="hamburger-btn" id="hamburgerMenu">
                 <i class="fas fa-bars"></i>
             </button>
@@ -140,10 +141,6 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('pemilih.logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </a>
                         <form id="logout-form" action="{{ route('pemilih.logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
@@ -151,10 +148,12 @@
                 </ul>
             </div>
         </div>
+        @endauth
     </nav>
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+    @if (auth()->check())
     {{-- humberger menu untuk mobile --}}
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="mb-4">
@@ -172,14 +171,12 @@
             <i class="fas fa-vote-yea"></i> Voting
         </a>
         <hr>
-        <a href="{{ route('pemilih.logout') }}" class="sidebar-item text-danger"
-            onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
         <form id="sidebar-logout-form" action="{{ route('pemilih.logout') }}" method="POST" class="d-none">
             @csrf
+            <button type="submit"> <i class="fas fa-sign-aout-alt"></i> Logout</button>
         </form>
     </div>
+    @endif
 
     <main class="py-4">
         <div class="container">
@@ -189,7 +186,7 @@
 
     <footer class="bg-dark text-white text-center py-3">
         <div class="container">
-            <small>&copy; 2024 Sistem Pemilihan OSIS - SMK PGRI 5 Jember</small>
+            <small>&copy; 2025 Sistem Pemilihan OSIS - SMK PGRI 5 Jember</small>
         </div>
     </footer>
 

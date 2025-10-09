@@ -48,11 +48,11 @@
                             </button>
                         </form>
 
-                        <div class="text-center mt-3">
+                        {{-- <div class="text-center mt-3">
                             <small class="text-muted">
                                 Login sebagai admin?<a href="{{ url('/admin/login') }}" class="justify-content-center">Klik di sini</a>
                             </small>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
