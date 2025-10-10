@@ -31,13 +31,13 @@ Route::prefix('admin')->middleware(['auth','role:admin'])->group(function () {
 
     Route::controller(Pemilih::class)->group(function () {
         Route::get('pemilih-data', 'getPemilih')->name('get.pemilih');
-        Route::get('/pemilih', 'index')->name('pemilih.index');
+        Route::get('/pemilih', 'datapemilih')->name('pemilih.index');
     });
 
     Route::resource('calon', CalonController::class);
 
 });
-Route::get('/pemilih/data', [Pemilih::class, 'getPemilih'])->name('get.pemilih');
+// Route::get('/pemilih/data', [Pemilih::class, 'getPemilih'])->name('get.pemilih');
 
 Route::prefix('pemilih')->middleware(['role:pemilih', 'auth'])->group(function () {
     Route::get('/dashboard', [Pemilih::class, 'index'])->name('pemilih.dashboard');

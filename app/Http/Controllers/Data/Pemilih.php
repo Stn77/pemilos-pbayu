@@ -72,4 +72,9 @@ class Pemilih extends Controller
         $calon = Calon::with('misi')->get();
         return view('pemilih.voting', compact('pemilih', 'calon'));
     }
+
+    public function datapemilih()
+    {
+        return view('admin.pemilih.index');
+    }
 }
