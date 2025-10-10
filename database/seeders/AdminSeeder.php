@@ -18,7 +18,7 @@ class AdminSeeder extends Seeder
             'name' => 'Admin Pemilos',
             'email' => 'admin@smkpgri5jember.sch.id',
             'password' => Hash::make('admin123'),
-            'is_admin' => true,
+            // 'is_admin' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
