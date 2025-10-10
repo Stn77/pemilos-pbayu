@@ -145,6 +145,7 @@
     <!-- Overlay untuk Mobile -->
     <div class="sidebar-overlay-admin" id="sidebarOverlayAdmin"></div>
 
+    {{-- @auth --}}
     <!-- Sidebar Mobile -->
     <div class="sidebar-mobile" id="sidebarMobile">
         <div class="sidebar-header-mobile">
@@ -182,19 +183,21 @@
         <div class="mt-4 pt-3 border-top">
             <div class="sidebar-user-info mb-3">
                 <small class="text-muted d-block">
-                    <i class="fas fa-user-shield"></i> {{ Auth::user()->name }}
+                    <i class="fas fa-user-shield"></i> {{ auth()->user()->name }}
                 </small>
             </div>
             <a class="nav-link-mobile text-danger" href="{{ route('logout') }}"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            <form id="logout-form" action="{{ route('logout') }}" method="POST"  >
                 @csrf
             </form>
         </div>
     </div>
+    {{-- @endauth --}}
 
+    {{-- @auth --}}
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <!-- Hamburger Button yang menyatu dengan navbar -->
@@ -208,22 +211,26 @@
 
             <div class="navbar-nav ms-auto">
                 <span class="navbar-text text-white me-3">
-                    <i class="fas fa-user-shield m-1"></i> {{ Auth::user()->name }}
+                    <i class="fas fa-user-shield m-1"></i> {{ auth()->user()->name }}
                 </span>
                 <a class="nav-link text-white" href="{{ route('logout') }}"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-out-alt m-2"></i> Logout
                 </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST"  class="d-none">
                     @csrf
+                    <button type="submit"> <i class="fas fa-sign-aout-alt"></i> Logout</button>
                 </form>
             </div>
         </div>
     </nav>
+    {{-- @endauth --}}
 
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar Desktop -->
+            {{-- @auth --}}
+
             <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
@@ -254,6 +261,7 @@
                     </ul>
                 </div>
             </nav>
+            {{-- @endauth --}}
 
             <!-- Main Content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">

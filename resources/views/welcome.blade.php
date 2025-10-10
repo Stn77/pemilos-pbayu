@@ -196,14 +196,14 @@
                             <p class="card-text text-muted mb-4">
                                 Login menggunakan NISN dan password untuk melakukan voting
                             </p>
-                            <a href="{{ route('pemilih.login') }}" class="btn btn-primary btn-lg w-100">
+                            <a href="{{ route('login') }}" class="btn btn-primary btn-lg w-100">
                                 <i class="fas fa-sign-in-alt me-2"></i>Login sebagai Pemilih
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-xl-4 col-lg-5 col-md-5 col-12 mb-4">
+                {{-- <div class="col-xl-4 col-lg-5 col-md-5 col-12 mb-4">
                     <div class="card shadow border-0">
                         <div class="card-body text-center p-4">
                             <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
@@ -219,7 +219,7 @@
                             </a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>

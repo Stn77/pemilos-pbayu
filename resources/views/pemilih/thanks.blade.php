@@ -78,15 +78,16 @@
                                 <span class="d-none d-sm-inline">Kembali ke Dashboard</span>
                                 <span class="d-inline d-sm-none">Dashboard</span>
                             </a>
-                            <a href="{{ route('pemilih.logout') }}"
+                            <a href="{{ route('logout') }}"
                                class="btn btn-outline-secondary flex-fill flex-sm-grow-0 py-2 px-3"
                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="fas fa-sign-out-alt me-1 me-sm-2"></i>
                                 <span class="d-none d-sm-inline">Logout</span>
                                 <span class="d-inline d-sm-none">Keluar</span>
                             </a>
-                            <form id="logout-form" action="{{ route('pemilih.logout') }}" method="POST" class="d-none">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"  class="d-none">
                                 @csrf
+                                {{-- <button type="submit"> <i class="fas fa-sign-aout-alt"></i> Logout</button> --}}
                             </form>
                         </div>
                     </div>

@@ -141,8 +141,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <form id="logout-form" action="{{ route('pemilih.logout') }}" method="POST" class="d-none">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST"  >
                             @csrf
+                            <button type="submit" class="btn btn-primary-outline"> <i class="fas fa-sign-aout-alt"></i> Logout</button>
                         </form>
                     </li>
                 </ul>
@@ -171,9 +172,9 @@
             <i class="fas fa-vote-yea"></i> Voting
         </a>
         <hr>
-        <form id="sidebar-logout-form" action="{{ route('pemilih.logout') }}" method="POST" class="d-none">
+        <form id="sidebar-logout-form" action="{{ route('logout') }}" method="POST"  >
             @csrf
-            <button type="submit"> <i class="fas fa-sign-aout-alt"></i> Logout</button>
+            <button type="submit" class="btn btn-danger"> <i class="fas fa-sign-aout-alt"></i> Logout</button>
         </form>
     </div>
     @endif
