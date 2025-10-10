@@ -67,8 +67,8 @@ class Kernel extends HttpKernel
     ];
 
     protected $routeMiddleware = [
-    // ... middleware yang sudah ada
-    'admin' => \App\Http\Middleware\AdminMiddleware::class,
-    'pemilih' => \App\Http\Middleware\PemilihMiddleware::class,
-];
+        // ... middleware yang sudah ada
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+    ];
 }

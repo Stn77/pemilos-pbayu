@@ -10,7 +10,7 @@ class Voting extends Model
     use HasFactory;
 
     protected $fillable = [
-        'pemilih_id',
+        'user_id',
         'calon_id',
         'waktu_voting'
     ];
@@ -21,7 +21,7 @@ class Voting extends Model
 
     public function pemilih()
     {
-        return $this->belongsTo(Pemilih::class);
+        return $this->belongsTo(User::class);
     }
 
     public function calon()
