@@ -334,7 +334,7 @@
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="form-group mb-3">
                 <button data-bs-toggle="modal" data-bs-target="#addmodal" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> <span class="d-none d-md-inline">Tambah Calon</span>
+                    <i class="fas fa-plus"></i> <span class="d-none d-md-inline">Tambah Data</span>
                 </button>
             </div>
         </div>
