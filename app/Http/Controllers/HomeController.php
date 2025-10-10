@@ -24,17 +24,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if (Auth::check()) {
-            if (Auth::user()->is_admin) {
-                return redirect()->route('admin.dashboard');
-            }
-            return view('home');
-        }
-
-        if (Auth::guard('pemilih')->check()) {
-            return redirect()->route('pemilih.dashboard');
-        }
-
-        return view('welcome');
+        
     }
 }
