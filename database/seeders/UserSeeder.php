@@ -26,22 +26,26 @@ class UserSeeder extends Seeder
         ])->assignRole($admin);
 
         User::create([
-            'name' => 'anas',
-            'nisn' => '1234',
-            'email' => '',
-            'password' => Hash::make('1234')
-        ])->assignRole($pemilih);
-        User::create([
-            'name' => 'viaz',
-            'nisn' => '12345',
-            'email' => '',
-            'password' => Hash::make('12345')
-        ])->assignRole($pemilih);
-        User::create([
-            'name' => 'indah',
-            'nisn' => '123456',
-            'email' => '',
-            'password' => Hash::make('123456')
-        ])->assignRole($pemilih);
+            'name' => 'panitia',
+            'nisn' => '112233',
+            'email' => 'panitia@admin.com',
+            'password' => Hash::make('123'),
+        ])->assignRole($admin);
+
+        // User::create([
+        //     'name' => 'anas',
+        //     'nisn' => '1234',
+        //     'password' => Hash::make('1234')
+        // ])->assignRole($pemilih);
+        // User::create([
+        //     'name' => 'viaz',
+        //     'nisn' => '12345',
+        //     'password' => Hash::make('12345')
+        // ])->assignRole($pemilih);
+        // User::create([
+        //     'name' => 'indah',
+        //     'nisn' => '123456',
+        //     'password' => Hash::make('123456')
+        // ])->assignRole($pemilih);
     }
 }
