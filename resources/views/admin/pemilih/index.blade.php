@@ -807,7 +807,7 @@
 
                 // RELOAD DATATABLE & Hide modal
                 $('#addModal').modal('hide');
-                $('#data-guru').DataTable().ajax.reload(null, false);
+                $('#pesertaTable').DataTable().ajax.reload(null, false);
             })
             .catch(error => {
                 // Error handling
