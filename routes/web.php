@@ -32,6 +32,7 @@ Route::prefix('admin')->middleware(['auth','role:admin'])->group(function () {
     Route::controller(Pemilih::class)->group(function () {
         Route::get('pemilih-data', 'getPemilih')->name('get.pemilih');
         Route::get('/pemilih', 'datapemilih')->name('pemilih.index');
+        Route::post('import', 'import')->name('pemilih.import');
     });
 
     Route::resource('calon', CalonController::class);
