@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -72,6 +73,7 @@
         </nav>
 
         <main class="py-4">
+            <div id="notification-area"></div>
             @yield('content')
         </main>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

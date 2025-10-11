@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Pemilos SMK PGRI 5 Jember</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -134,6 +135,34 @@
             .nav-link.text-white {
                 display: flex !important;
             }
+        }
+    </style>
+    <style>
+        /* Style untuk notifikasi */
+        #notification-area {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            width: 350px;
+        }
+
+        .alert-auto-close {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .alert-auto-close .progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .alert-auto-close .progress-bar {
+            transition: width 2s linear;
         }
     </style>
 
@@ -278,7 +307,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif
-
+                    <div id="notification-area"></div>
                 @yield('content')
             </main>
         </div>
@@ -323,6 +352,52 @@
             });
         });
     </script>
+        <script>
+            function showNotifCreate(message, type = 'success', duration = 5000){
+                // Tentukan kelas alert berdasarkan type
+                let alertClass;
+                switch(type) {
+                    case 'success':
+                        alertClass = 'alert-success';
+                        break;
+                    case 'warning':
+                        alertClass = 'alert-warning';
+                        break;
+                    case 'error':
+                        alertClass = 'alert-danger';
+                        break;
+                    case 'info':
+                    default:
+                        alertClass = 'alert-info';
+                        break;
+                }
+
+                // Buat elemen notifikasi
+                const notificationId = 'notif-' + Date.now();
+                const notification = $(
+                    `<div id="${notificationId}" class="alert ${alertClass} alert-auto-close alert-dismissible fade show" role="alert">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        ${message}
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 100%"></div>
+                        </div>
+                    </div>`
+                );
+
+                // Tambahkan notifikasi ke area notifikasi
+                $('#notification-area').append(notification);
+
+                // Animasikan progress bar
+                setTimeout(function() {
+                    notification.find('.progress-bar').css('width', '0%');
+                }, 10);
+
+                // Hilangkan notifikasi setelah 2 detik
+                setTimeout(function() {
+                    $('#' + notificationId).alert('close');
+                }, duration);
+            }
+        </script>
 
     @stack('scripts')
 </body>
