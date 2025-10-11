@@ -20,6 +20,11 @@ class User extends Authenticatable
         'kelas',
     ];
 
+    protected $casts = [
+        // 'email_verified_at' => 'datetime',
+        'password' => 'hashed', // This line enables automatic hashing
+    ];
+
     protected $hidden = [
         'password',
         'remember_token',
