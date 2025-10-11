@@ -593,7 +593,7 @@
                     orderable: false,
                 },
                 {data: 'nisn', title: 'NISN'},
-                {data: 'nama', title: 'Nama'},
+                {data: 'name', title: 'Nama'},
                 {data: 'kelas', title: 'Kelas'},
                 {
                     data: 'sudah_memilih',
@@ -698,25 +698,29 @@
         // Muat data mobile pertama kali
         loadMobileData();
 
-        // Fungsi untuk drag & drop area
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
         const dragDropArea = document.getElementById('drag-drop-area');
         const fileInput = document.getElementById('excel_file');
         const fileInfo = document.getElementById('file-info');
         const fileName = document.getElementById('file-name');
         const fileSize = document.getElementById('file-size');
-        const removeFile = document.getElementById('remove-file');
+        const removeFileBtn = document.getElementById('remove-file');
         const submitBtn = document.getElementById('submit-btn');
+        const uploadForm = document.getElementById('upload-form');
+        const uploadProgress = document.getElementById('upload-progress');
+        const progressBar = uploadProgress.querySelector('.progress-bar');
 
-        // Event listeners untuk drag & drop
+        // Prevent default drag behaviors
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dragDropArea.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
         });
 
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
+        // Highlight drop area when item is dragged over it
         ['dragenter', 'dragover'].forEach(eventName => {
             dragDropArea.addEventListener(eventName, highlight, false);
         });
@@ -724,6 +728,159 @@
         ['dragleave', 'drop'].forEach(eventName => {
             dragDropArea.addEventListener(eventName, unhighlight, false);
         });
+
+        // Handle dropped files
+        dragDropArea.addEventListener('drop', handleDrop, false);
+        dragDropArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                handleFiles(e.target.files);
+            }
+        });
+
+        // Remove file
+        removeFileBtn.addEventListener('click', function() {
+            removeFile();
+        });
+
+        // AJAX FORM SUBMISSION
+        uploadForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent normal form submission
+
+            if (fileInput.files.length === 0) {
+                showNotifCreate('Pilih file Excel terlebih dahulu', 'error');
+                return;
+            }
+
+            uploadFileAjax();
+        });
+
+        function uploadFileAjax() {
+            const formData = new FormData();
+            formData.append('excel_file', fileInput.files[0]);
+            formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+
+            // Show progress and disable button
+            showProgress();
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Importing...';
+
+            // Show processing notification
+            showNotifCreate('Sedang memproses file Excel...', 'info');
+
+            // AJAX Request
+            fetch('{{route('pemilih.import')}}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => Promise.reject(err));
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Success handling
+                hideProgress();
+                resetForm();
+
+                // Show success notification
+                showNotifCreate(data.message, 'success');
+
+                // Show detailed errors if any
+                if (data.data.errors && data.data.errors.length > 0) {
+                    setTimeout(() => {
+                        let errorMessage = 'Detail Error:\n';
+                        data.data.errors.slice(0, 5).forEach(error => {
+                            errorMessage += '• ' + error + '\n';
+                        });
+                        if (data.data.errors.length > 5) {
+                            errorMessage += `... dan ${data.data.errors.length - 5} error lainnya`;
+                        }
+                        showNotifCreate(errorMessage, 'warning', 3000);
+                    }, 1000);
+                }
+
+                // RELOAD DATATABLE & Hide modal
+                $('#addModal').modal('hide');
+                $('#data-guru').DataTable().ajax.reload(null, false);
+            })
+            .catch(error => {
+                // Error handling
+                hideProgress();
+                resetSubmitButton();
+
+                let errorMessage = 'Terjadi kesalahan saat import';
+                if (error.message) {
+                    errorMessage = error.message;
+                } else if (error.errors) {
+                    // Validation errors
+                    const firstError = Object.values(error.errors)[0];
+                    if (Array.isArray(firstError)) {
+                        errorMessage = firstError[0];
+                    }
+                }
+
+                showNotifCreate(errorMessage, 'error');
+                console.error('Import Error:', error);
+            });
+        }
+
+        function showProgress() {
+            uploadProgress.style.display = 'block';
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress > 90) progress = 90;
+                progressBar.style.width = progress + '%';
+
+                if (progress >= 90) {
+                    clearInterval(interval);
+                }
+            }, 200);
+
+            // Store interval untuk cleanup nanti
+            uploadProgress.progressInterval = interval;
+        }
+
+        function hideProgress() {
+            // Complete progress bar
+            progressBar.style.width = '100%';
+            progressBar.classList.remove('progress-bar-animated');
+
+            // Clear interval if exists
+            if (uploadProgress.progressInterval) {
+                clearInterval(uploadProgress.progressInterval);
+            }
+
+            // Hide after animation
+            setTimeout(() => {
+                uploadProgress.style.display = 'none';
+                progressBar.style.width = '0%';
+                progressBar.classList.add('progress-bar-animated');
+            }, 1000);
+        }
+
+        function resetForm() {
+            fileInput.value = '';
+            removeFile();
+            resetSubmitButton();
+        }
+
+        function resetSubmitButton() {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-upload me-2"></i>Import Data Siswa';
+        }
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
 
         function highlight() {
             dragDropArea.classList.add('drag-over');
@@ -733,42 +890,90 @@
             dragDropArea.classList.remove('drag-over');
         }
 
-        dragDropArea.addEventListener('drop', handleDrop, false);
-
         function handleDrop(e) {
             const dt = e.dataTransfer;
             const files = dt.files;
             handleFiles(files);
         }
 
-        fileInput.addEventListener('change', function() {
-            handleFiles(this.files);
-        });
-
         function handleFiles(files) {
             if (files.length > 0) {
                 const file = files[0];
-                const validTypes = ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv'];
 
-                if (validTypes.includes(file.type) || file.name.endsWith('.xlsx') || file.name.endsWith('.xls') || file.name.endsWith('.csv')) {
-                    // Update UI
-                    dragDropArea.classList.add('has-file');
-                    fileName.textContent = file.name;
-                    fileSize.textContent = formatFileSize(file.size);
-                    fileInfo.classList.add('show');
-                    submitBtn.disabled = false;
-                } else {
-                    alert('File harus berupa Excel (.xlsx, .xls) atau CSV (.csv)');
+                // Validate file type
+                const allowedTypes = [
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'application/vnd.ms-excel',
+                    'text/csv'
+                ];
+
+                if (!allowedTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls|csv)$/i)) {
+                    showNotifCreate('Format file tidak didukung. Gunakan .xlsx, .xls, atau .csv', 'error');
+                    return;
                 }
+
+                // Validate file size (10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    showNotifCreate('Ukuran file terlalu besar. Maksimal 10MB', 'error');
+                    return;
+                }
+
+                // Update file input
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                fileInput.files = dt.files;
+
+                // Show file info
+                showFileInfo(file);
+                showNotifCreate(`File "${file.name}" siap untuk diupload`, 'success');
             }
         }
 
-        removeFile.addEventListener('click', function() {
+        function showFileInfo(file) {
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            fileInfo.classList.add('show');
+            dragDropArea.classList.add('has-file');
+            submitBtn.disabled = false;
+
+            // Update drag drop area content
+            const uploadContent = dragDropArea.querySelector('.upload-content');
+            uploadContent.innerHTML = `
+                <div class="upload-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="upload-text text-success">
+                    <strong>File siap untuk diupload!</strong>
+                </div>
+                <div class="upload-subtext">
+                    Klik "Import Data Siswa" untuk memulai proses import
+                </div>
+            `;
+        }
+
+        function removeFile() {
             fileInput.value = '';
-            dragDropArea.classList.remove('has-file');
             fileInfo.classList.remove('show');
+            dragDropArea.classList.remove('has-file');
             submitBtn.disabled = true;
-        });
+
+            // Reset drag drop area content
+            const uploadContent = dragDropArea.querySelector('.upload-content');
+            uploadContent.innerHTML = `
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">
+                    <strong>Drag & Drop file Excel di sini</strong>
+                </div>
+                <div class="upload-subtext">
+                    atau <span style="color: #007bff; font-weight: 500;">klik untuk browse</span>
+                </div>
+                <div class="upload-subtext mt-2">
+                    <small>Format: .xlsx, .xls, .csv (Max: 10MB)</small>
+                </div>
+            `;
+        }
 
         function formatFileSize(bytes) {
             if (bytes === 0) return '0 Bytes';
